@@ -11,6 +11,7 @@ class  database {
     // дескриптор соединения
     private static $db_conn;
 
+    //шаблон синглтон чтобы не плодить коннекты к базе
     public static function instance(){
         if(null===self::$instance){
             self::$instance= new database(self::$db_host, self::$db_name, self::$db_user, self::$db_password);

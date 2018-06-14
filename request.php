@@ -15,6 +15,7 @@ class request {
     public static function get_router(){
         return self::$router;
     }
+    //возвращает путь запроса например для www.site.ru/pages/page?id=1 это будет pages/page
     public static function path(){
         if (null==self::$path){
             self::$path = $_SERVER['REQUEST_URI'];
@@ -28,7 +29,7 @@ class request {
          
             
     }
-
+    //возвращает парметры запроса универсально массивом независимо от метода запроса
     public static function params(){
         if (null==self::$params){
             switch(self::method()){
@@ -51,7 +52,7 @@ class request {
         return self::$params;
          
     }
-
+    //возвращает метод запроса
     public static function method($comparewith=null){
         if (null==self::$method){
            self::$method = $_SERVER['REQUEST_METHOD'];

@@ -2,13 +2,19 @@
 require_once 'phonenumber.php';
 class clientscontroller {
 
+    /*
+    обрабатывает запрос на вывод списка клиентов
+    как и все функции в этом классе принимает на вход класс запроса чтобы получить оттуда метод и параметры запроса
+    */ 
     public function index($r){
         $client= new client(database::instance(),'clients');
         $params=$client->select_all();
         include 'forms/index.view.php';
        
     }
-
+    /*
+    показывает конкретного клиента
+    */ 
     public function clientview($r){
         $client= new client(database::instance(),'clients');
 
@@ -24,19 +30,20 @@ class clientscontroller {
         include 'forms/viewclient.view.php';
         
     }
-
+    /* удаляет клиента */
     public function clientremove($r){
         $client= new client(database::instance(),'clients');
         $client->remove($r::params()['id']);
         $r::get_router()->redirect('root');
         
     }
-
+    /*добавляет клиента */
     public function clientadd($r){
-
+        //если запрос пришел с методом гет то просто показываем форму пустую для добавления
         if($r::method('get')){
             include 'forms/addclient.view.php';
         };
+        //если запрос методом пост то вытаскиваем параметры запроса и заносим клиента в базу
         if($r::method('post')){
             $client= new client(database::instance(),'clients');
             $client->save($r::params());
@@ -59,10 +66,11 @@ class clientscontroller {
                     
                 }
             }
+            //после того как добавили в базу клиента делаем редирект на список клиентов
             $r::get_router()->redirect('root');
         };
     }
-
+    //обновляет данные существующего клиента по кнопке сохранить в форме просмотра клиента
     public function clientupdate($r){
         
         $client= new client(database::instance(),'clients',$r::params());
@@ -89,7 +97,7 @@ class clientscontroller {
         $r::get_router()->redirect('root',$r::params());
 
     }
-
+    //делает поиск по фамилии клиента или номеру телефона
     public function clientsearch($r){
         if($r::method('get')){
             include 'forms/searchclient.view.php';
@@ -98,6 +106,7 @@ class clientscontroller {
             $client= new client(database::instance(),'clients');
             $params=null;
             $resultok=false;
+            //поле с фамилией имеет приоритет на полем с номером телефона поэтому его на непустоту проверяем первым
             if($r::params()['surname']<>''){
 
                 $params=$client->select_where('surname', '=',$r::params()['surname'] );
